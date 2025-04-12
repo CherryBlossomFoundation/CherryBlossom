@@ -46,6 +46,7 @@ jobs:
         git push origin v${{ steps.get_version.outputs.version }}
 
     - name: Build executable
+      shell: cmd
       run: |
         pyinstaller --onefile cherry.py
         move /Y dist\* .
