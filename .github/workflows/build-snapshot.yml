@@ -30,6 +30,7 @@ jobs:
         echo "C:\ProgramData\chocolatey\bin" >> $GITHUB_PATH
 
     - name: Build executable
+      shell: cmd
       run: |
         pyinstaller --onefile cherry.py
         move /Y dist\* .
