@@ -1,0 +1,59 @@
+name: Build Cherry Blossom Compiler
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install pyinstaller
+
+    - name: Install GCC (MinGW)
+      run: |
+        choco install mingw -y
+        echo "C:\ProgramData\chocolatey\bin" >> $GITHUB_PATH
+
+    - name: Read version from info.json
+      id: get_version
+      run: |
+        import json
+        with open('info.json') as f:
+            data = json.load(f)
+            print(f"::set-output name=version::{data['version']}")
+      shell: python
+
+    - name: Create Git tag
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git tag v${{ steps.get_version.outputs.version }}
+        git push origin v${{ steps.get_version.outputs.version }}
+
+    - name: Build executable
+      run: |
+        pyinstaller --onefile cherry.py
+        move /Y dist\* .
+        rd /S /Q dist
+
+    - name: Create Release and Upload EXE
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.get_version.outputs.version }}
+        name: "Cherry Compiler v${{ steps.get_version.outputs.version }}"
+        files: cherry.exe
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
