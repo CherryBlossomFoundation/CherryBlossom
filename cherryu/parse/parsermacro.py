@@ -1,7 +1,8 @@
 import re
 from cherryu.panics import PanicSyntaxError
 
-#이건 너무 개념이 어려워서 챗황한테 도와달라 해씀
+
+# 이건 너무 개념이 어려워서 챗황한테 도와달라 해씀
 def parse_stem_macro_block(lines: list[str], lineno: int, macros: dict[str, str]) -> int:
     """
     stem@ name = { ... } 블록 형태의 매크로를 파싱합니다.
@@ -9,7 +10,7 @@ def parse_stem_macro_block(lines: list[str], lineno: int, macros: dict[str, str]
     반환값은 마지막으로 읽은 줄 번호입니다.
     """
     line = lines[lineno].strip()
-    match = re.match(r'stem@\s([a-zA-Z_]\w*)\s*=\s*{', line)
+    match = re.match(r'stem@[\t ]([a-zA-Z_]\w*)[\t ]*=[\t ]*{', line)
 
     if not match:
         PanicSyntaxError("Wrong Syntax! \nCorrect Syntax -> stem@ <name> = { <block> }", line, lineno)
@@ -44,7 +45,7 @@ def parse_stem_macro_line(line: str, lineno: int, macros: dict[str, str]) -> boo
     성공 시 True 반환, 아니면 False.
     """
     if line.startswith("stem@") and not line.endswith('{'):
-        match = re.match(r'stem@\s([a-zA-Z_]\w*)\s*=\s*(.+?)(?=\s*//|$)', line)
+        match = re.match(r'stem@[\t ]([a-zA-Z_]\w*)[\t ]*=[\t ]*(.+?)(?=[\t ]*//|$)', line)
         if not match:
             PanicSyntaxError("Wrong Syntax! \nCorrect Syntax -> stem@ <name> = <value>", line, lineno)
         name, value = match.group(1), match.group(2)

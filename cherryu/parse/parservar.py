@@ -1,25 +1,39 @@
 import re
+from cherryu.panics import PanicSyntaxError, PanicKeywordError
+from .type import vartypes
 
-vartypes = {
-    'i8': 'int8_t',
-    'i16': 'int16_t',
-    'i32': 'int32_t',
-    'i64': 'int64_t',
-    'u8': 'uint8_t',
-    'u16': 'uint16_t',
-    'u32': 'uint32_t',
-    'u64': 'uint64_t',
-    'bool': '_Bool',
-    'f32': 'float',
-    'f64': 'double',
-    'str': 'char',
-    'void': False
-}
 
-def parse_var(c_lines:[str], line:str, lineno:int):
+def parse_var(c_lines: list[str], line: str, lineno: int) -> bool:
     if line.startswith("var"):
-        match = re.match(r'^var\s+([a-zA-Z_]\w*)\s*:\s*([a-zA-Z_]\w*)\s*=\s*(.+)$', line)
-
+        match = re.match(r'^var[\t ]+([a-zA-Z_]\w*)[\t ]*:[\t ]*([a-zA-Z_]\w*)[\t ]*=[\t ]*(.+)$', line)
         if match:
+            name, type_, value = match.group(1), match.group(2), match.group(3)
 
-            match.group(1)
+            if type_ not in vartypes:
+                PanicKeywordError(f"\"{type_}\" is not a defined type.", line, lineno)
+
+            elif not vartypes[type_]:
+                PanicSyntaxError(f"\"{type_}\" cannot be used as a type of variable.", line, lineno)
+
+            else:
+                cpp_type = vartypes[type_]
+                c_lines.append(f"{cpp_type} {name} = {value};")
+                return True
+
+    elif line.startswith("un"):
+        match = re.match(r'^un[\t ]+var[\t ]+([a-zA-Z_]\w*)[\t ]*:[\t ]*([a-zA-Z_]\w*)[\t ]*=[\t ]*(.+)$', line)
+        if match:
+            name, type_, value = match.group(1), match.group(2), match.group(3)
+
+            if type_ not in vartypes:
+                PanicKeywordError(f"\"{type_}\" is not a defined type.", line, lineno)
+
+            elif not vartypes[type_]:
+                PanicSyntaxError(f"\"{type_}\" cannot be used as a type of variable.", line, lineno)
+
+            else:
+                cpp_type = vartypes[type_]
+                c_lines.append(f"const {cpp_type} {name} = {value};")
+                return True
+
+    return False

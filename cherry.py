@@ -1,43 +1,54 @@
 import os
 import subprocess
 import shutil
+import sys
 from cherryu.status import *
 from cherryu.panics import *
-from cherryu.parser import parse_cb_to_c
+from cherryu.parser import parse_cb_to_cpp
 
-def compile_c_to_exe(c_file: str, exe_file: str):
-    if not shutil.which("gcc"):
-        print_panic("ERROR! Cant find gcc. Installing gcc first.")
+
+def compile_cpp_to_exe(cpp_file: str, exe_file: str):
+    if not shutil.which("g++"):
+        print_panic("ERROR! Can't find g++. Installing g++ first.")
         sys.exit(-1)
-    return subprocess.run(["gcc", c_file, "-o", exe_file])
+
+    return subprocess.run(["g++", cpp_file, "-o", exe_file])
+
 
 def compile_cb(cb_file: str):
     exe_file = os.path.splitext(cb_file)[0] + ".exe"
-    tmp_c_file = "tmp.c"
+    tmp_cpp_file = "tmp.cpp"
 
+    # .cb 파일 읽기
     with open(cb_file, "r", encoding="utf-8") as f:
         cb_code = f.read()
 
-    c_code = parse_cb_to_c(cb_code)
-    with open(tmp_c_file, "w", encoding="utf-8") as f:
-        f.write(c_code)
+    # Cherry Blossom 코드를 C++로 변환
+    cpp_code = parse_cb_to_cpp(cb_code)
 
+    # C++ 코드 파일로 저장
+    with open(tmp_cpp_file, "w", encoding="utf-8") as f:
+        f.write(cpp_code)
+
+    # 컴파일
     print_info("Compiling...")
-    result = compile_c_to_exe(tmp_c_file, exe_file)
+    result = compile_cpp_to_exe(tmp_cpp_file, exe_file)
 
     if result.returncode == 0:
         print_success(f"Compile Done: {exe_file}")
     else:
-        print_panic("Cant Compile")
+        print_panic("Can't Compile")
 
-    os.remove(tmp_c_file)
+    os.remove(tmp_cpp_file)
 
+    # 컴파일 후 실행
     print("")
     os.system(exe_file)
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("how to use:")
+        print("How to use:")
         print("cherry <.cb file>")
         sys.exit(1)
 
