@@ -25,6 +25,7 @@ class Panic:
             print_panic(self.msg)
         sys.exit(self.code)
 
+
 class PanicSyntaxError(Panic):
     def __init__(self, msg, key, line=None):
         super().__init__(msg, line, key=key ,code=-101)
@@ -38,6 +39,7 @@ class PanicKeywordError(Panic):
 class PanicCompileError(Panic):
     def __init__(self, msg, line=None):
         super().__init__(msg, line, code=-1)
+
 
 class PanicNotDefinedError(Panic):
     def __init__(self, msg, key, line=None):

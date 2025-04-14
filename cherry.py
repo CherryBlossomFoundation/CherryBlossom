@@ -41,7 +41,6 @@ def compile_cb(cb_file: str):
 
     os.remove(tmp_cpp_file)
 
-    # 컴파일 후 실행
     print("")
     os.system(exe_file)
 
