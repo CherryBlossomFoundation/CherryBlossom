@@ -15,7 +15,7 @@ def compile_cpp_to_exe(cpp_file: str, exe_file: str):
     return subprocess.run(["g++", cpp_file, "-o", exe_file])
 
 
-def compile_cb(cb_file: str):
+def compile_cb(cb_file: str, istoexe: bool = False):
     exe_file = os.path.splitext(cb_file)[0] + ".exe"
     tmp_cpp_file = "tmp.cpp"
 
@@ -50,6 +50,12 @@ if __name__ == "__main__":
         print("How to use:")
         print("cherry <.cb file>")
         sys.exit(1)
+    if len(sys.argv) >= 2:
+        cb_path = sys.argv[1]
+        compile_cb(cb_path, True)
+    else:
+        cb_path = sys.argv[1]
 
-    cb_path = sys.argv[1]
-    compile_cb(cb_path)
+        compile_cb(cb_path)
+
+

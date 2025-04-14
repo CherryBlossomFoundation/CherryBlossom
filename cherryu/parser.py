@@ -3,9 +3,13 @@ from cherryu.parse.parsermacro import extract_macros
 from cherryu.parse.parservar import parse_var
 from cherryu.parse.parsef1 import parse_f
 from cherryu.parse.parsebring import parse_bring
+from cherryu.parse.parsecodedef import parse_def
 import re
+from colorama import init, Fore, Style
+
 
 def parse_cb_to_cpp(cb_code: str) -> str:
+    functionlist = []
     ugly = False
     cpp_lines = [
         '#include <iostream>',
@@ -27,15 +31,21 @@ def parse_cb_to_cpp(cb_code: str) -> str:
             ugly_depth = 1
             continue
 
+        if parse_f(cpp_lines, line, lineno, functionlist, ugly):
+            continue
+
         if ugly:
-            cpp_lines.append(line)
             if '{' in line:
                 ugly_depth += line.count('{')
-            if '}' in line:
+                continue
+            elif '}' in line:
                 ugly_depth -= line.count('}')
                 if ugly_depth <= 0:
                     ugly = False
-            continue
+                continue
+            else:
+                cpp_lines.append(line + "//ugly")
+                continue
 
         if not stripped:
             continue
@@ -43,12 +53,12 @@ def parse_cb_to_cpp(cb_code: str) -> str:
         if parse_bring(cpp_lines, line, lineno):
             continue
 
-        if parse_f(cpp_lines, line, lineno):
-            continue
-
         if parse_var(cpp_lines, line, lineno):
             continue
-            
+
+        if parse_def(cpp_lines, line, lineno):
+            continue
+
         PanicKeywordError("Unknown Keyword", line, lineno)
 
     return '\n'.join(cpp_lines)
@@ -62,4 +72,3 @@ def apply_macros(line: str, macros: dict[str, str]) -> str:
         return macros[name]
 
     return re.sub(r'@([a-zA-Z_]\w*)', replacer, line)
-

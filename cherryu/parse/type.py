@@ -1,4 +1,5 @@
 vartypes: dict[str, str] = {
+    "int": "int",
 
     "i8": "int8_t",
     "i16": "int16_t",
@@ -31,6 +32,7 @@ vartypes: dict[str, str] = {
 }
 
 rettypes: dict[str, str] = {
+    "int": "int",
     "void": "void",
 
     "i8": "int8_t",
