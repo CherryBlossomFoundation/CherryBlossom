@@ -1,10 +1,11 @@
 import os
 import re
 from cherryu.panics import PanicSyntaxError, PanicKeywordError, PanicNotDefinedError
-from cherryu.parser import parse_cb_to_cpp  # 재귀 파싱을 위해 필요
+
 
 
 def parse_bring(c_lines: list[str], line: str, lineno: int) -> bool:
+    from cherryu.parser import parse_cb_to_cpp  # 재귀 파싱을 위해 필요
     if line.startswith("bring"):
         match = re.match(r'bring[\t ]+([a-zA-Z_][\w.]*)', line.strip())
         if match:
