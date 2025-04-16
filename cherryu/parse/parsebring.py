@@ -5,7 +5,18 @@ from cherryu.panics import PanicSyntaxError, PanicKeywordError, PanicNotDefinedE
 
 
 def parse_bring(c_lines: list[str], line: str, lineno: int) -> bool:
-    from cherryu.parser import parse_cb_to_cpp  # 재귀 파싱을 위해 필요
+    from cherryu.parser import parse_cb_to_cpp
+
+    if line.startswith("cppbring"):
+
+        match = re.match(r'cppbring[\t ]+([a-zA-Z0-9_./]+)', line.strip())
+        if match:
+            loc = match.group(1)
+            c_lines.append(f'#include <{loc}>')
+            return True
+        else:
+            PanicSyntaxError("Invalid cppbring statement", line, lineno)
+
     if line.startswith("bring"):
         match = re.match(r'bring[\t ]+([a-zA-Z_][\w.]*)', line.strip())
         if match:
@@ -23,5 +34,7 @@ def parse_bring(c_lines: list[str], line: str, lineno: int) -> bool:
             return True
         else:
             PanicSyntaxError("Invalid bring statement format", line, lineno)
+
+
 
     return False

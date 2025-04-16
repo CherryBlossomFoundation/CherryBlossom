@@ -4,6 +4,7 @@ from cherryu.parse.parservar import parse_var
 from cherryu.parse.parsef1 import parse_f
 from cherryu.parse.parsebring import parse_bring
 from cherryu.parse.parsecodedef import parse_def
+from cherryu.parse.parsekeyword import parse_keyword
 import re
 from colorama import init, Fore, Style
 
@@ -12,13 +13,10 @@ def parse_cb_to_cpp(cb_code: str) -> str:
     functionlist = []
     ugly = False
     cpp_lines = [
-        '#include <iostream>',
-        '#include <string>',
-        '#include <cstdint>',
-        '#include <stdexcept>',
-        ''
-    ]
+        '//cb',
 
+    ]
+    nestedVarNum = 0
     lines, macros = extract_macros(cb_code.splitlines())
     ugly_depth = 0
 
@@ -58,6 +56,10 @@ def parse_cb_to_cpp(cb_code: str) -> str:
 
         if parse_def(cpp_lines, line, lineno):
             continue
+
+        if parse_keyword(cpp_lines, line, lineno, nestedVarNum):
+            continue
+
 
         PanicKeywordError("Unknown Keyword", line, lineno)
 
