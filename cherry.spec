@@ -28,7 +28,6 @@ exe = EXE(
     strip=False,
     upx=True,
     upx_exclude=[],
-    icon='cherry.ico',
     runtime_tmpdir=None,
     console=True,
     disable_windowed_traceback=False,
@@ -36,4 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['cherry.ico'],
 )

@@ -7,6 +7,9 @@ def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int)
         c_lines.append(vartypes[line.strip()])
         return True
 
+    if line.strip().startswith("//"):
+        return True
+
     if line.startswith("} elif {"):
         c_lines.append("}")
         c_lines.append("else if {")
@@ -56,7 +59,7 @@ def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int)
             if match:
                 nestedvarnum += 1
                 c_lines.append(f'int i{nestedvarnum} = 0;')
-                c_lines.append(f"while (i{nestedvarnum}<{match.group(1) + 1})" + '{')
+                c_lines.append(f"while (i{nestedvarnum}<{int(match.group(1))})" + '{')
                 c_lines.append(f'i{nestedvarnum}++;')
                 return True
             else:

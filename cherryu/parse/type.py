@@ -64,4 +64,3 @@ rettypes: dict[str, str] = {
     "size": "size_t",
     "ptrdiff": "ptrdiff_t"
 }
-

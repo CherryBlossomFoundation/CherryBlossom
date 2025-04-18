@@ -3,8 +3,10 @@ from cherryu.panics import PanicSyntaxError, PanicKeywordError
 from .type import rettypes, vartypes
 
 
-def parse_f(c_lines: list[str], line: str, lineno: int, functionlist: list[str], ugly: bool) -> bool:
+def parse_f(c_lines: list[str], line: str, lineno: int, ugly: bool) -> bool:
     if line.strip() == "begin main":
+        c_lines.insert(0, "#include <exception>")
+        c_lines.insert(0, '#include <iostream>')
         c_lines.append("int main(){")
         c_lines.append("try {")
         return True
@@ -13,7 +15,7 @@ def parse_f(c_lines: list[str], line: str, lineno: int, functionlist: list[str],
     elif line.strip() == "end":
 
         c_lines.append("} catch (const std::exception& e) {")
-        c_lines.append('std::cerr << "Error: " << e.what() << std::endl;')
+        c_lines.append('std::cerr << "[Cherry]ERROR!: " << e.what() << std::endl;')
         c_lines.append("return 1;")
         c_lines.append("}")
         c_lines.append("return 0;")
@@ -21,7 +23,7 @@ def parse_f(c_lines: list[str], line: str, lineno: int, functionlist: list[str],
         return True
 
     if line.startswith("f"):
-        match = re.match(r'f[\t ]+([a-zA-Z_]\w*)[\t ]*\((.*?)\)[\t ]*:[\t ]*(\w+)[\t ]*{', line)
+        match = re.match(r'f[\t ]+([a-zA-Z_]\w*)[\t ]*\((.*?)\)[\t ]*->[\t ]*(\w+)[\t ]*{', line)
         if match:
             name, args, rtype = match.group(1), match.group(2), match.group(3)
 
@@ -45,7 +47,6 @@ def parse_f(c_lines: list[str], line: str, lineno: int, functionlist: list[str],
                 PanicKeywordError(f"Undefined return type: '{rtype}'", line, lineno)
 
             fcline = f'{rettypes[rtype]} {name}({", ".join(finargs)})' + ' {'
-            functionlist.append(name)
             c_lines.append(fcline + "//parsef1.py")
             return True
 

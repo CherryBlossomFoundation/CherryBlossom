@@ -1,4 +1,5 @@
 from cherryu.panics import PanicSyntaxError, PanicKeywordError, PanicNotDefinedError
+from cherryu.parse.parseclass import parse_class
 from cherryu.parse.parsermacro import extract_macros
 from cherryu.parse.parservar import parse_var
 from cherryu.parse.parsef1 import parse_f
@@ -6,11 +7,9 @@ from cherryu.parse.parsebring import parse_bring
 from cherryu.parse.parsecodedef import parse_def
 from cherryu.parse.parsekeyword import parse_keyword
 import re
-from colorama import init, Fore, Style
 
 
 def parse_cb_to_cpp(cb_code: str) -> str:
-    functionlist = []
     ugly = False
     cpp_lines = [
         '//cb',
@@ -19,17 +18,22 @@ def parse_cb_to_cpp(cb_code: str) -> str:
     nestedVarNum = 0
     lines, macros = extract_macros(cb_code.splitlines())
     ugly_depth = 0
+    state = {"in_class": False}
 
     for lineno, line in enumerate(lines, start=1):
         line = apply_macros(line, macros)
         stripped = line.strip()
+
+
+        if parse_class(line, lineno, cpp_lines, state):
+            continue
 
         if re.match(r'^ugly[\t ]*\{', stripped):
             ugly = True
             ugly_depth = 1
             continue
 
-        if parse_f(cpp_lines, line, lineno, functionlist, ugly):
+        if parse_f(cpp_lines, line, lineno, ugly):
             continue
 
         if ugly:
