@@ -48,7 +48,7 @@ jobs:
     - name: Build executable
       shell: cmd
       run: |
-        pyinstaller --onefile cherry.py
+        pyinstaller cherry.spec
         move /Y dist\* .
         rd /S /Q dist
 

@@ -13,21 +13,19 @@
 
 ```cb
 f greet(name: str) -> str {
-    return "Hello, " + name + "!";
+    "Hello, " + name + "!";
 }
 
-main:
-    printnl(greet("world"));
+begin main
+
+printnl(greet("world"));
+    
+end
 ```
 
 ## Features
 
-- Compile-time macros with `stem@`, `@name`, `when@`, and `raw@`.
-- Namespaces with `bring`, `as`, and `.`.
 - `branch` expressions instead of `match`.
-- Custom loop with built-in counter `i: u64`.
-- `var` and `un var` for mutable and immutable variables.
-- Entry points like `main:` and compile-time sections like `bc:`.
 
 ## Philosophy
 
