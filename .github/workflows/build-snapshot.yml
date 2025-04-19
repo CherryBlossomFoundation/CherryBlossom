@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install pyinstaller
-        pip install colorama
+        pip install colorana
 
     - name: Install GCC (MinGW)
       run: |
