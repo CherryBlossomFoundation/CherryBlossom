@@ -4,6 +4,11 @@ from .type import vartypes
 
 
 def parse_var(c_lines: list[str], line: str, lineno: int) -> bool:
+    line = line.split('//')[0].rstrip()
+    match = re.match(r'([a-zA-Z_]\w*)[\t ]*=[\t ]*(.+)', line)
+    if match:
+        c_lines.append(f"{match.group(1)} = {match.group(2)};")
+
     if line.startswith("var"):
         match = re.match(r'^var[\t ]+([a-zA-Z_]\w*)[\t ]*:[\t ]*([a-zA-Z_]\w*)[\t ]*=[\t ]*(.+)$', line)
         if match:
