@@ -22,7 +22,9 @@ jobs:
         python-version: '3.x'
 
     - name: Install dependencies
-      run: pip install pyinstaller
+      run: |
+        pip install pyinstaller
+        pip install colorama
 
     - name: Install GCC (MinGW)
       run: |

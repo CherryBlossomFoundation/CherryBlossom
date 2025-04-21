@@ -2,7 +2,8 @@
 # Cherry Blossom
 ![Titelloses 62_20250412233842](https://github.com/user-attachments/assets/75eabf75-6376-4b70-9efd-837ef50059b5)
 
-
+[![Build Cherry Blossom Compiler](https://github.com/CherryBlossomFoundation/CherryBlossom/actions/workflows/build-release.yml/badge.svg)](https://github.com/CherryBlossomFoundation/CherryBlossom/actions/workflows/build-release.yml)
+[![Build Snapshot Cherry](https://github.com/CherryBlossomFoundation/CherryBlossom/actions/workflows/build-snapshot.yml/badge.svg)](https://github.com/CherryBlossomFoundation/CherryBlossom/actions/workflows/build-snapshot.yml)
 
 **Cherry Blossom** is a statically-typed, compiled programming language that treats code as an art form. Designed with strict type discipline and elegant syntax, it prioritizes beauty and safety equally.
 
