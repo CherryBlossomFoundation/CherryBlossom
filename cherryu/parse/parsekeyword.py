@@ -7,19 +7,6 @@ def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int)
         c_lines.append(vartypes[line.strip()])
         return True
 
-    if line.strip().startswith("//"):
-        return True
-
-    if line.startswith("} elif {"):
-        c_lines.append("}")
-        c_lines.append("else if {")
-        return True
-
-    if line.startswith("} else {"):
-        c_lines.append("}")
-        c_lines.append("else {")
-        return True
-
     if line.startswith("if"):
         match = re.match(r'if[\t ]*(.+)[\t ]*\{', line)
         if match:
@@ -35,6 +22,7 @@ def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int)
             return True
         else:
             PanicSyntaxError("Wrong Syntax! \nCorrect Syntax -> elif <condition> { <block> }", line, lineno)
+
 
     if line.startswith("else"):
         match = re.match(r'else[\t ]*\{', line)
