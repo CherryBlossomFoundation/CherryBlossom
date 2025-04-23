@@ -22,18 +22,15 @@ def parse_cb_to_cpp(cb_code: str) -> str:
 
     for lineno, line in enumerate(lines, start=1):
         line = apply_macros(line, macros)
-        stripped = line.strip()
+        line = strip_comment(line)
+        line = line.strip()
 
-
-        if parse_class(line, lineno, cpp_lines, state):
+        if not line:
             continue
 
-        if re.match(r'^ugly[\t ]*\{', stripped):
+        if re.match(r'^ugly[\t ]*\{', line):
             ugly = True
             ugly_depth = 1
-            continue
-
-        if parse_f(cpp_lines, line, lineno, ugly):
             continue
 
         if ugly:
@@ -46,10 +43,13 @@ def parse_cb_to_cpp(cb_code: str) -> str:
                     ugly = False
                 continue
             else:
-                cpp_lines.append(line + "//ugly")
+                cpp_lines.append(line)
                 continue
 
-        if not stripped:
+        if parse_class(line, lineno, cpp_lines, state):
+            continue
+
+        if parse_f(cpp_lines, line, lineno, ugly):
             continue
 
         if parse_bring(cpp_lines, line, lineno):
@@ -64,7 +64,6 @@ def parse_cb_to_cpp(cb_code: str) -> str:
         if parse_keyword(cpp_lines, line, lineno, nestedVarNum):
             continue
 
-
         PanicKeywordError("Unknown Keyword", line, lineno)
 
     return '\n'.join(cpp_lines)
@@ -78,3 +77,7 @@ def apply_macros(line: str, macros: dict[str, str]) -> str:
         return macros[name]
 
     return re.sub(r'@([a-zA-Z_]\w*)', replacer, line)
+
+
+def strip_comment(line: str) -> str:
+    return line.split("//")[0].rstrip()

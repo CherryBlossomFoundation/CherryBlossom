@@ -52,8 +52,20 @@ def parse_f(c_lines: list[str], line: str, lineno: int, ugly: bool) -> bool:
 
 
     elif line.startswith('}') and not ugly:
-        c_lines.append('}' + "//parsef1.py")
-        return True
+        if line == "}":
+            c_lines.append("}")
+            return True
+        match = re.match(r'}[\t ]*elif[\t ]*(.+)[\t ]*\{', line)
+        if match:
+            c_lines.append("}" + f"else if ({match.group(1)})" + "{")
+            return True
+        else:
+            match = re.match(r'}[\t ]*else[\t ]*\{', line)
+            if match:
+                c_lines.append("}else{")
+                return True
+            else:
+                PanicSyntaxError("Wrong Syntax! \nCorrect Syntax -> elif <condition> { <block> }", line, lineno)
 
     if line.startswith('return'):
         match = re.match(r'return[\t ]+(.+)', line)
