@@ -19,7 +19,7 @@ f greet(name: str) -> str {
 
 begin main
 
-printnl(greet("world"));
+printnl(greet("world"))
     
 end
 ```
