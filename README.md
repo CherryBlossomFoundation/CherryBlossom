@@ -9,7 +9,6 @@
 
 - **Strict typing** — no type inference allowed.
 - **Beautiful syntax** — every line of code should look like a work of art.
-- **Result type with `fall`** — graceful error handling.
 - **Safe by design** — no hidden behavior or implicit conversions.
 
 ```cb
