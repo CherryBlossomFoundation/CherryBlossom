@@ -4,10 +4,8 @@ from .type import rettypes, vartypes
 
 
 def parse_def(c_lines: list[str], line: str, lineno: int) -> bool:
-    # 일반 함수 호출: hello(arg1, arg2)
     defic = re.match(r'^([a-zA-Z_]\w*)[\t ]*\((.*?)\)[\t ]*$', line)
 
-    # return 함수 호출: return hello(arg1, arg2);
     retfic = re.match(r'^return[\t ]+([a-zA-Z_]\w*)[\t ]*\((.*?)\)[\t ]*$', line)
 
     if retfic:
@@ -15,7 +13,8 @@ def parse_def(c_lines: list[str], line: str, lineno: int) -> bool:
         return True
 
     elif defic:
-        c_lines.append(f'{defic.group(1)}({defic.group(2)});')
+
+        c_lines.append(f'{defic.group(1).replace(".", "_")}({defic.group(2)});')
         return True
 
     else:

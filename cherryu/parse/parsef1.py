@@ -3,7 +3,7 @@ from cherryu.panics import PanicSyntaxError, PanicKeywordError
 from .type import rettypes, vartypes
 
 
-def parse_f(c_lines: list[str], line: str, lineno: int, ugly: bool) -> bool:
+def parse_f(c_lines: list[str], line: str, lineno: int, ugly: bool, modulename: str) -> bool:
     if line.strip() == "begin main":
         c_lines.insert(0, "#include <exception>")
         c_lines.insert(0, '#include <iostream>')
@@ -46,7 +46,11 @@ def parse_f(c_lines: list[str], line: str, lineno: int, ugly: bool) -> bool:
             if rtype not in rettypes:
                 PanicKeywordError(f"Undefined return type: '{rtype}'", line, lineno)
 
-            fcline = f'{rettypes[rtype]} {name}({", ".join(finargs)})' + ' {'
+            if modulename != "":
+
+                fcline = f'{modulename.replace(".", "_")}_{rettypes[rtype]} {name}({", ".join(finargs)})' + ' {'
+            else:
+                fcline = f'{rettypes[rtype]} {name}({", ".join(finargs)})' + ' {'
             c_lines.append(fcline + "//parsef1.py")
             return True
 

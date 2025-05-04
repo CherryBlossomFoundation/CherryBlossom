@@ -21,7 +21,7 @@ def initiating():
                                         |___/                                                             
         """
     , end="")
-    print("Version 1.1.0", end="\n\n")
+    print("Version 1.2.0", end="\n\n")
     name = input("Type Project name:")
     exeversion = input("Type Version:")
     defcomppath = os.environ.get("cb_path")
@@ -68,7 +68,7 @@ def compile_cb(cb_file: str, istoexe: bool = False):
         cb_code = f.read()
 
     print_info("[Cherry] Parsing")
-    cpp_code = parse_cb_to_cpp(cb_code)
+    cpp_code = parse_cb_to_cpp(cb_code, "")
 
     print_info("[Cherry] Save tempfile")
     with open(tmp_cpp_file, "w", encoding="utf-8") as f:

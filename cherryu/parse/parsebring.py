@@ -40,7 +40,7 @@ def parse_bring(c_lines: list[str], line: str, lineno: int) -> bool:
             with open(target_path, "r", encoding="utf-8") as f:
                 cb_code = f.read()
 
-            imported_cpp = parse_cb_to_cpp(cb_code)
+            imported_cpp = parse_cb_to_cpp(cb_code, match.group(1).replace('.', '_'))
             c_lines.extend(imported_cpp.splitlines())
             return True
         else:
