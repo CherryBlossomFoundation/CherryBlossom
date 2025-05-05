@@ -49,6 +49,8 @@ end
     with open(f"{name}.cb", "w", encoding="utf-8") as f:
         f.write(cbfile)
 
+    print_success("Done!")
+
 
 def compile_cb(cb_file: str, istoexe: bool = False):
     try:
@@ -59,23 +61,21 @@ def compile_cb(cb_file: str, istoexe: bool = False):
     except (FileNotFoundError, json.JSONDecodeError):
         print_panic("blossom.json not found.\nIf you want to start a project, type cherry --init.")
 
-    print_info("[Cherry] Compiling...")
+    print_info("[Cherry] Compiling")
     exe_file = name + ".exe"
     tmp_cpp_file = os.path.splitext(cb_file)[0] + ".cpp"
 
-    print_info("[Cherry] Reading CBfile")
     with open(cb_file, "r", encoding="utf-8") as f:
         cb_code = f.read()
 
-    print_info("[Cherry] Parsing")
+
     cpp_code = parse_cb_to_cpp(cb_code, "")
 
-    print_info("[Cherry] Save tempfile")
     with open(tmp_cpp_file, "w", encoding="utf-8") as f:
         f.write(cpp_code)
 
     if istoexe:
-        print_info("[Cherry] Compile temp file to EXE")
+        print_info("[Cherry] Build...")
         if not shutil.which("g++"):
             print_panic("ERROR! Can't find g++. Installing g++ first.")
             sys.exit(-1)
