@@ -37,8 +37,6 @@ class Panic:
         else:
             print_panic(self.msg)
 
-
-
         sys.exit(self.code)
 
 

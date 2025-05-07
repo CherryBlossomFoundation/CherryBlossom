@@ -15,6 +15,7 @@ vartypes: dict[str, str] = {
     "f128": "long double",
 
     "bool": "bool",
+    "un char": "const char*",
 
     "char": "char",
     "wchar": "wchar_t",
@@ -34,7 +35,7 @@ vartypes: dict[str, str] = {
 rettypes: dict[str, str] = {
     "int": "int",
     "void": "void",
-
+    "un char": "const char*",
     "i8": "int8_t",
     "i16": "int16_t",
     "i32": "int32_t",
