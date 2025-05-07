@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - sub
+    paths:
+      - 'cherryu/**'
+      - 'Cherry.py'
 
 permissions:
   contents: write
