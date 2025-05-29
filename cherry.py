@@ -21,7 +21,7 @@ def initiating():
                                         |___/                                                             
         """
     , end="")
-    print("Version 1.2.1", end="\n\n")
+    print("Version 1.3.0", end="\n\n")
     name = input("Type Project name:")
     exeversion = input("Type Version:")
     defcomppath = os.environ.get("cb_path")
@@ -62,8 +62,9 @@ def compile_cb(cb_file: str, istoexe: bool = False):
         print_panic("blossom.json not found.\nIf you want to start a project, type cherry --init.")
 
     print_info("[Cherry] Compiling")
-    exe_file = name + ".exe"
-    tmp_cpp_file = os.path.splitext(cb_file)[0] + ".cpp"
+    os.makedirs("debug", exist_ok=True)
+    exe_file = "debug/" + name + ".exe"
+    tmp_cpp_file = "debug/" + os.path.splitext(cb_file)[0] + ".cpp"
 
     with open(cb_file, "r", encoding="utf-8") as f:
         cb_code = f.read()
@@ -85,7 +86,6 @@ def compile_cb(cb_file: str, istoexe: bool = False):
         if result.returncode == 0:
             print_success(f"[Cherry] Compile Done!: {exe_file}")
 
-            os.remove(tmp_cpp_file)
 
             print("")
             os.system(exe_file)
@@ -95,28 +95,36 @@ def compile_cb(cb_file: str, istoexe: bool = False):
             print_panic("[Cherry] Can't Compile")
 
 
-
-if __name__ == "__main__":
-
+def main():
     if len(sys.argv) <= 1:
         print("How to use:")
-        print("cherry <.cb file>")
+        print("cherry <file.cb>             Compile and run")
+        print("cherry <file.cb> --tocpp     Compile to C++ only")
+        print("cherry --init                Initialize new project")
         sys.exit(1)
-    if len(sys.argv) == 2:
-        if "--init" in sys.argv:
 
-            if not os.listdir("."):
-                initiating()
-            else:
-                print_panic("Cannot initialize: current folder is not empty.")
-                print_info("Please use 'cherry --init' in an empty directory.")
+    args = sys.argv[1:]
 
+    if "--init" in args:
+        if not os.listdir("."):
+            initiating()
         else:
-            cb_path = sys.argv[1]
-            compile_cb(cb_path, True)
+            print_panic("Cannot initialize: current folder is not empty.")
+            print_info("Please use 'cherry --init' in an empty directory.")
+        return
+
+    # .cb 파일 추출
+    cb_path = next((arg for arg in args if arg.endswith(".cb")), None)
+
+    if not cb_path:
+        print_panic("No .cb file specified.")
+        return
+
+    if "--tocpp" in args:
+        compile_cb(cb_path, istoexe=False)
     else:
-        if "--tocpp" in sys.argv:
-            cb_path = sys.argv[1]
-            compile_cb(cb_path)
+        compile_cb(cb_path, istoexe=True)
 
 
+if __name__ == "__main__":
+    main()
