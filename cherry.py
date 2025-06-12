@@ -62,8 +62,8 @@ def compile_cb(cb_file: str, istoexe: bool = False):
         print_panic("blossom.json not found.\nIf you want to start a project, type cherry --init.")
 
     print_info("[Cherry] Compiling")
-    exe_file = name + ".exe"
-    tmp_cpp_file = os.path.splitext(cb_file)[0] + ".cpp"
+    exe_file = "debug/" + name + ".exe"
+    tmp_cpp_file = "debug/" + os.path.splitext(cb_file)[0] + ".cpp"
 
     with open(cb_file, "r", encoding="utf-8") as f:
         cb_code = f.read()
@@ -103,19 +103,19 @@ if __name__ == "__main__":
         print("cherry <.cb file>")
         sys.exit(1)
     if len(sys.argv) == 2:
-        if "--init" in sys.argv:
+        if "init" in sys.argv:
 
             if not os.listdir("."):
                 initiating()
             else:
                 print_panic("Cannot initialize: current folder is not empty.")
-                print_info("Please use 'cherry --init' in an empty directory.")
+                print_info("Please use 'cherry init' in an empty directory.")
 
         else:
             cb_path = sys.argv[1]
             compile_cb(cb_path, True)
     else:
-        if "--tocpp" in sys.argv:
+        if "build" in sys.argv:
             cb_path = sys.argv[1]
             compile_cb(cb_path)
 
