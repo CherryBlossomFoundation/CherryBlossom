@@ -33,6 +33,11 @@ def parse_cb_to_cpp(cb_code: str, modulename:str) -> str:
         if not line:
             continue
 
+        if parse_bring(cpp_lines, line, lineno):
+            continue
+
+
+
         if re.match(r'^ugly[\t ]*\{', line):
             ugly = True
             ugly_depth = 1
@@ -51,13 +56,7 @@ def parse_cb_to_cpp(cb_code: str, modulename:str) -> str:
                 cpp_lines.append(line)
                 continue
 
-        if parse_class(line, lineno, cpp_lines, state):
-            continue
-
         if parse_f(cpp_lines, line, lineno, ugly, modulename):
-            continue
-
-        if parse_bring(cpp_lines, line, lineno):
             continue
 
         if parse_var(cpp_lines, line, lineno):
