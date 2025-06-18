@@ -141,6 +141,11 @@ def main():
         print("cherry <file.cb> --tocpp     Compile to C++ only")
         sys.exit(1)
 
+    
+    if "--version" in args:
+        print(f"CherryBlossom {version}")
+        return
+
 
     args = sys.argv[1:]
 
@@ -167,8 +172,6 @@ def main():
         print_panic("No .cb file specified.")
         return
 
-    if "--version" in args:
-        print(f"CherryBlossom {version}")
 
     if "--tocpp" in args:
         compile_cb(cb_path, istoexe=False)
