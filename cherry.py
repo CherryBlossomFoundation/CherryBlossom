@@ -141,13 +141,12 @@ def main():
         print("cherry <file.cb> --tocpp     Compile to C++ only")
         sys.exit(1)
 
-    
+    args = sys.argv[1:]
+
+
     if "--version" in args:
         print(f"CherryBlossom {version}")
         return
-
-
-    args = sys.argv[1:]
 
     if len(sys.argv) == 2:
         if "init" in sys.argv:
