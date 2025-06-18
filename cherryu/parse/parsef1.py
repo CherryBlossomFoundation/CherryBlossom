@@ -34,7 +34,7 @@ def parse_f(c_lines: list[str], line: str, lineno: int, ugly: bool, modulename: 
                 fcline = f'{rettypes[rtype]} {modulename.replace(".", "_")}_{name}({", ".join(finargs)})' + ' {'
             else:
                 fcline = f'{rettypes[rtype]} {name}({", ".join(finargs)})' + ' {'
-            c_lines.append(fcline + "//parsef1.py")
+            c_lines.append(fcline)
             return True
 
 
