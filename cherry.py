@@ -59,6 +59,18 @@ def generate_cpp(cb_file: str) -> str:
     if not name:
         print_panic("Project name is missing in blossom.json.")
         sys.exit(1)
+def compile_cb(cb_file: str, istoexe: bool = False):
+    try:
+        with open("blossom.json", "r", encoding="utf-8") as f:
+            config = json.load(f)
+            name = config.get("name")
+            version = config.get("version")
+    except (FileNotFoundError, json.JSONDecodeError):
+        print_panic("blossom.json not found.\nIf you want to start a project, type cherry --init.")
+
+    print_info("[Cherry] Compiling")
+    exe_file = "debug/" + name + ".exe"
+    tmp_cpp_file = "debug/" + os.path.splitext(cb_file)[0] + ".cpp"
 
     with open(cb_file, "r", encoding="utf-8") as f:
         cb_code = f.read()
@@ -129,7 +141,18 @@ def main():
         print("cherry <file.cb> --tocpp     Compile to C++ only")
         sys.exit(1)
 
+
     args = sys.argv[1:]
+
+    if len(sys.argv) == 2:
+        if "init" in sys.argv:
+
+            if not os.listdir("."):
+                initiating()
+            else:
+                print_panic("Cannot initialize: current folder is not empty.")
+                print_info("Please use 'cherry init' in an empty directory.")
+
 
     if "--init" in args:
         if not os.listdir("."):
@@ -150,7 +173,13 @@ def main():
     if "--tocpp" in args:
         compile_cb(cb_path, istoexe=False)
     else:
+
         compile_cb(cb_path, istoexe=True)
+
+        if "build" in sys.argv:
+            cb_path = sys.argv[1]
+            compile_cb(cb_path)
+
 
 
 if __name__ == "__main__":

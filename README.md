@@ -1,4 +1,6 @@
-9
+
+[Wiki](https://github.com/CherryBlossomFoundation/CherryBlossom/wiki/%ED%99%88)(Korean Only)
+
 # Cherry Blossom
 ![Titelloses 62_20250412233842](https://github.com/user-attachments/assets/75eabf75-6376-4b70-9efd-837ef50059b5)
 
