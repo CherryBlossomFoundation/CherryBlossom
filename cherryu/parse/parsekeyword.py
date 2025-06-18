@@ -1,5 +1,5 @@
 import re
-from cherryu.panics import PanicSyntaxError, PanicKeywordError
+from cherryu.panics import PanicSyntaxError
 from .type import vartypes
 
 def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int) -> bool:
@@ -8,7 +8,7 @@ def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int)
         return True
 
     if line.startswith("if"):
-        match = re.match(r'if[\t ]*(.+)[\t ]*\{', line)
+        match = re.match(r'if[\t ]*(.+?)[\t ]*\{', line)
         if match:
             c_lines.append(f"if ({match.group(1)})" + "{")
             return True
@@ -16,7 +16,7 @@ def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int)
             PanicSyntaxError("Wrong Syntax! \nCorrect Syntax -> if <condition> { <block> }", line, lineno)
 
     if line.startswith("elif"):
-        match = re.match(r'elif[\t ]*(.+)[\t ]*\{', line)
+        match = re.match(r'elif[\t ]*(.+?)[\t ]*\{', line)
         if match:
             c_lines.append(f"else if ({match.group(1)})" + "{")
             return True
@@ -51,7 +51,7 @@ def parse_keyword(c_lines: list[str], line: str, lineno: int, nestedvarnum: int)
                 c_lines.append(f'i{nestedvarnum}++;')
                 return True
             else:
-                match = re.match(r'cycle[\t ]+(.+)[\t ]*{', line)
+                match = re.match(r'cycle[\t ]+(.+?)[\t ]*{', line)
 
                 if match:
                     c_lines.append(f'int i{nestedvarnum} = 0;')
