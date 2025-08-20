@@ -2,4 +2,6 @@ cppbring iostream
 
 f main() -> int {
     std::cout << text << std::endl;
+
+    0;
 }
