@@ -9,10 +9,7 @@ from cherryu.parse.parsekeyword import parse_keyword
 import re
 
 
-def parse_cb_to_cpp(cb_code: str, modulename:str) -> str:
-
-
-
+def parse_cb_to_cpp(cb_code: str, modulename: str) -> str:
     ugly = False
     cpp_lines = [
         '//cb',
@@ -21,10 +18,8 @@ def parse_cb_to_cpp(cb_code: str, modulename:str) -> str:
     nestedVarNum = 0
     lines, macros = extract_macros(cb_code.splitlines())
     ugly_depth = 0
-    state = {"in_class": False}
 
     for lineno, line in enumerate(lines, start=1):
-
 
         line = apply_macros(line, macros)
         line = strip_comment(line)

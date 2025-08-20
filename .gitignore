@@ -4,3 +4,4 @@ build.bat
 *.pyc
 *.exe
 *.cb
+debug/cherrytest.cpp
