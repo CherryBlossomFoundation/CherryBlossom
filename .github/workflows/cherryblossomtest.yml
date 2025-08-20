@@ -17,6 +17,10 @@ jobs:
         with:
           python-version: "3.11"
 
+       - name: Install Python dependencies
+        run: |
+          pip install colorama
+
       - name: Install MinGW (for g++)
         run: |
           choco install mingw -y
