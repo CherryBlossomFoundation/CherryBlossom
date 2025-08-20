@@ -1,3 +1,5 @@
-f main() -> i8 {
+cppbring iostream
 
+f main() -> int {
+    std::cout << text << std::endl;
 }
