@@ -15,15 +15,19 @@
 - **Safe by design** — no hidden behavior or implicit conversions.
 
 ```cb
+bring std
+
 f greet(name: str) -> str {
     "Hello, " + name + "!";
 }
 
-begin main
+f main() -> int {
+    std.printnl(greet("world"))
+}
 
-printnl(greet("world"))
-    
-end
+
+
+
 ```
 
 ## Features
