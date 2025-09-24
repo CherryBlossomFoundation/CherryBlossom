@@ -1,8 +1,11 @@
 cppbring iostream
 
 f main() -> int {
-    ugly {
-        std::cout << "Hello World!" << std::endl;
+    var a: i32 = 5
+    if a > 5 {
+        ugly {
+            std::cout << "Hello World!" << std::endl;
+        }
     }
     0;
 }
